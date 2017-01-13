@@ -1,0 +1,4 @@
+[package]
+version = 1.0.0
+tags = Venom, venom, VENOM, rootkit
+description = https://security.web.cern.ch/security/venom.shtml
