@@ -1,4 +1,4 @@
-# Signature information based on CERN scanner for VENOM
+# Signature information based on https://cern.ch/security/venom.shtml
 # Also thanks to Fatema for contributions to more accurate signatures
 
 # NOTE:  The payload is in the SYN packet so ip-proto==tcp breaks the signature match
