@@ -1,4 +1,5 @@
 [package]
 version = 1.0.0
 tags = Venom, venom, VENOM, rootkit
+script_dir = scripts
 description = https://security.web.cern.ch/security/venom.shtml
