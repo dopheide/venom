@@ -3,7 +3,7 @@ module Site;
 #redef exit_only_after_terminate = T;
 
 # file containing signature
-redef signature_files += "venom.sig";
+redef signature_files += "packages/venom/venom.sig";
 redef FilteredTraceDetection::enable = F;
 export {
         redef enum Notice::Type += {
