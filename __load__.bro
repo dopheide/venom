@@ -1,1 +1,1 @@
-@load venom.bro
+@load ./venom.bro
