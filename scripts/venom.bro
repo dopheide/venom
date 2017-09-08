@@ -1,10 +1,8 @@
-module Site;
-
-#redef exit_only_after_terminate = T;
-
 # file containing signature
-redef signature_files += "packages/venom/venom.sig";
-redef FilteredTraceDetection::enable = F;
+@load-sigs ./venom.sig
+
+module Venom;
+
 export {
         redef enum Notice::Type += {
                 VENOM_SCANNER,
@@ -14,15 +12,17 @@ export {
 
         global venom_callback_addrs: set[addr,port] &write_expire=2days;
 
-        global Site::w_m_new_venom: event(a: addr, p: port);
-        global Site::m_w_add_venom: event(a: addr, p: port);
+        global Venom::w_m_new_venom: event(a: addr, p: port);
+        global Venom::m_w_add_venom: event(a: addr, p: port);
 }
+
+redef Signatures::ignored_ids += /VENOM-potential|VENOM-exact/;
 
 # Using Aashish's style of cluster communication
 @if ( Cluster::is_enabled() )
 @load base/frameworks/cluster
-redef Cluster::manager2worker_events += /Site::m_w_add_venom/;
-redef Cluster::worker2manager_events += /Site::w_m_new_venom/;
+redef Cluster::manager2worker_events += /Venom::m_w_add_venom/;
+redef Cluster::worker2manager_events += /Venom::w_m_new_venom/;
 @endif
 
 event bro_done(){
@@ -70,7 +70,7 @@ event signature_match(state: signature_state, msg: string, data: string){
         v_addr = to_addr(venom_addrs[i]);
 
 @if ( Cluster::is_enabled() )
-        event Site::w_m_new_venom(v_addr, v_port);
+        event Venom::w_m_new_venom(v_addr, v_port);
 @else
         add venom_callback_addrs[v_addr,v_port];
 @endif
@@ -85,14 +85,14 @@ event signature_match(state: signature_state, msg: string, data: string){
 # we don't really even need to keep track of the set on the manager,
 # it just needs to communicate the change to the workers?
 @if ( Cluster::is_enabled() && Cluster::local_node_type() == Cluster::MANAGER )
-event Site::w_m_new_venom(a: addr, p: port)
+event Venom::w_m_new_venom(a: addr, p: port)
 {
-    event Site::m_w_add_venom(a,p);
+    event Venom::m_w_add_venom(a,p);
 }
 @endif
 
 @if ( Cluster::is_enabled() && Cluster::local_node_type() != Cluster::MANAGER )
-event Site::m_w_add_venom(a: addr, p: port){
+event Venom::m_w_add_venom(a: addr, p: port){
   add venom_callback_addrs[a,p];
 }
 @endif
