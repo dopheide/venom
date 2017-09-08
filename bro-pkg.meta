@@ -2,4 +2,4 @@
 version = 1.0.0
 tags = Venom, venom, VENOM, rootkit
 script_dir = scripts
-description = https://security.web.cern.ch/security/venom.shtml
+description = Attempts to detect an attacker calling to the VENOM Linux Rootkit https://security.web.cern.ch/security/venom.shtml
